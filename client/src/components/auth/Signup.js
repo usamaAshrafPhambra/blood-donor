@@ -3,6 +3,8 @@ import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { signup } from "../../actions/auth";
 
+import { Card } from "antd";
+
 const Signup = ({ signup, history }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -30,69 +32,78 @@ const Signup = ({ signup, history }) => {
   //   return <Redirect to="/login" />;
   // }
   return (
-    <div>
-      <form
-        className="form"
-        onSubmit={(e) => {
-          onSubmit(e);
-        }}
-      >
-        <div className="forms_field">
-          <input
-            type="text"
-            placeholder="Name"
-            name="name"
-            value={name}
-            onChange={(e) => onChange(e)}
-            required
-          />
-        </div>
-        <div className="forms_field">
-          <input
-            type="text"
-            placeholder="email"
-            name="email"
-            value={email}
-            onChange={(e) => onChange(e)}
-            required
-          />
-        </div>
-        <div className="forms_field">
-          <input
-            type="password"
-            placeholder="Password"
-            name="password"
-            required
-            value={password}
-            onChange={(e) => {
-              onChange(e);
-            }}
-          />
-        </div>
-        <div className="forms_field">
-          <input
-            type="password"
-            placeholder="Conform password"
-            name="password2"
-            required
-            value={password2}
-            onChange={(e) => {
-              onChange(e);
-            }}
-          />
-        </div>
+    <div
+      style={{
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Card style={{ width: 300 }}>
+        <form
+          className="form"
+          onSubmit={(e) => {
+            onSubmit(e);
+          }}
+        >
+          <div className="forms_field">
+            <input
+              type="text"
+              placeholder="Name"
+              name="name"
+              value={name}
+              onChange={(e) => onChange(e)}
+              required
+            />
+          </div>
+          <div className="forms_field">
+            <input
+              type="text"
+              placeholder="email"
+              name="email"
+              value={email}
+              onChange={(e) => onChange(e)}
+              required
+            />
+          </div>
+          <div className="forms_field">
+            <input
+              type="password"
+              placeholder="Password"
+              name="password"
+              required
+              value={password}
+              onChange={(e) => {
+                onChange(e);
+              }}
+            />
+          </div>
+          <div className="forms_field">
+            <input
+              type="password"
+              placeholder="Conform password"
+              name="password2"
+              required
+              value={password2}
+              onChange={(e) => {
+                onChange(e);
+              }}
+            />
+          </div>
 
-        <div className="forms_buttons">
-          <input
-            type="submit"
-            value="Sign up"
-            className="forms_buttons-action"
-          />
-        </div>
-        <p className="my-1">
-          You have already account <Link to="/login">Log In</Link>
-        </p>
-      </form>
+          <div className="forms_buttons">
+            <input
+              type="submit"
+              value="Sign up"
+              className="forms_buttons-action"
+            />
+          </div>
+          <p className="my-1">
+            You have already account <Link to="/login">Log In</Link>
+          </p>
+        </form>
+      </Card>
     </div>
   );
 };

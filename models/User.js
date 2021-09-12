@@ -31,11 +31,13 @@ UserSchema.methods.generateJWT = function () {
   const today = new Date();
   const expirationDate = new Date(today);
   expirationDate.setDate(today.getDate() + 60);
+
   let payload = {
-    id: this._id,
-    email: this.email,
-    user: this.role,
+    user: {
+      id: this._id,
+    },
   };
+
   return jwt.sign(payload, mySecret, {
     expiresIn: parseInt(expirationDate.getTime() / 1000, 10),
   });

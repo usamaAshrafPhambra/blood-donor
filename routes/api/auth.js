@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const User = require("../../models/User");
 const config = require("config");
 const auth = require("../../middleware/auth");
+const verifyGoogleToken = require("../../middleware/verifyToken");
 const { check, validationResult } = require("express-validator");
 
 Router.get("/", auth, async (req, res) => {
@@ -66,5 +67,121 @@ Router.post(
     }
   }
 );
+
+Router.post("/google", async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    const data = await verifyGoogleToken(token);
+
+    const { email, name, picture } = data;
+
+    const user = await User.findOne({ email });
+
+    if (user) {
+      const payload = {
+        id: {
+          id: user.id,
+        },
+      };
+      const token = user.generateJWT();
+
+      if (!token) {
+        return res.status(400).json({
+          message: "error in generating Code",
+        });
+      }
+      return res.status(200).json({
+        token,
+      });
+    } else {
+      const data = {
+        body: {
+          name: name,
+          avatar: picture,
+          email,
+          // password: email + randomString.generate(),
+          password: email + "123",
+        },
+      };
+
+      const newUser = new User(data.body);
+
+      await newUser.save();
+
+      const token = newUser.generateJWT();
+
+      if (!token) {
+        return res.status(400).json({
+          message: "error in generating Code",
+        });
+      }
+
+      return res.status(200).json({
+        token,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message + "error 500" });
+  }
+});
+
+Router.post("/facebook", async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    console.log("token", token);
+
+    const data = await verifyGoogleToken(token);
+
+    const { email, firstName, lastName, picture } = data;
+
+    const user = await User.findOne({ email });
+
+    if (user) {
+      const token = user.generateJWT();
+
+      if (!token) {
+        return res.status(400).json({
+          message: "error in generating Code",
+        });
+      }
+
+      return res.status(200).json({
+        token,
+      });
+    } else {
+      const data = {
+        body: {
+          name: firstName + lastName,
+          avatar: picture,
+          email,
+          // password: email + randomString.generate(),
+          password: email + "123",
+        },
+      };
+
+      const newUser = new User(data.body);
+
+      await newUser.save();
+
+      const token = newUser.generateJWT();
+
+      if (!token) {
+        return res.status(400).json({
+          message: "error in generating Code",
+        });
+      }
+
+      return res.status(200).json({
+        token,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+});
 
 module.exports = Router;

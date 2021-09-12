@@ -6,7 +6,7 @@ const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
-const verifyGoogleToken = require("../../middleware/verifyToken");
+
 const { check, validationResult } = require("express-validator");
 
 Router.post(
@@ -76,69 +76,5 @@ Router.post(
     }
   }
 );
-
-Router.post("/google", async (req, res) => {
-  try {
-    const { token } = req.body;
-    const data = await verifyGoogleToken(token);
-
-    const { email, name, picture } = data;
-
-    const user = await User.findOne({ email });
-
-    if (user) {
-      const payload = {
-        id: {
-          id: user.id,
-        },
-      };
-      const token = user.generateJWT();
-
-      if (!token) {
-        return res.status(400).json({
-          message: "error in generating Code",
-        });
-      }
-      return res.status(200).json({
-        message: "successfully logged in",
-        data: {
-          user,
-          token,
-        },
-      });
-    } else {
-      const data = {
-        body: {
-          name: name,
-          avatar: picture,
-          email,
-          // password: email + randomString.generate(),
-          password: email + "123",
-        },
-      };
-
-      const newUser = new User(data.body);
-
-      await newUser.save();
-
-      const token = newUser.generateJWT();
-
-      if (!token) {
-        return res.status(400).json({
-          message: "error in generating Code",
-        });
-      }
-      return res.status(200).json({
-        message: "successfully logged in",
-        data: {
-          user,
-          token,
-        },
-      });
-    }
-  } catch (error) {
-    res.status(500).json({ message: error.message + "error 500" });
-  }
-});
 
 module.exports = Router;
