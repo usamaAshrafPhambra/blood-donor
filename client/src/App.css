@@ -330,6 +330,12 @@ button {
   margin-right: 0.6rem;
 }
 
+.authPageImage {
+  position: relative;
+  background: url('./img/authPageImage.jpg') no-repeat center center/cover;
+  height: 100vh;
+}
+
 /* Landing Page */
 .landing {
   position: relative;

@@ -6,7 +6,7 @@ import Signup from "./components/auth/Signup";
 import Landing from "./components/layout/Landing";
 import Dashboard from "./components/layout/Dashboard";
 import { PersistGate } from "redux-persist/integration/react";
-
+import "antd/dist/antd.css";
 import "./App.css";
 // import { route } from '../../routes/api/user';
 

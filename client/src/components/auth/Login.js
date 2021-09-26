@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { signin, gsignin } from "../../actions/auth";
 import { useDispatch } from "react-redux";
 import GoogleSignIn from "./GoogleSignIn";
+import { Row, Col } from "antd";
 import FaceBookSignIn from "./FaceBookSignIn";
 
 import { Card } from "antd";
@@ -36,59 +37,59 @@ const Login = ({ signin, gsignin, isAuthenticated }) => {
 
   return (
     <>
-      <div
-        style={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Card style={{ width: 300 }}>
-          <form
-            className="form"
-            onSubmit={(e) => {
-              onSubmit(e);
-            }}
-          >
-            <div className="forms_field">
-              <input
-                type="text"
-                placeholder="email"
-                name="email"
-                value={email}
-                onChange={(e) => onChange(e)}
-                required
-              />
-            </div>
-            <div className="forms_field">
-              <input
-                type="password"
-                placeholder="Password"
-                name="password"
-                required
-                value={password}
-                onChange={(e) => {
-                  onChange(e);
+      <Row>
+        <Col style={{ backgroundColor: "black" }} span={18}>
+          u
+        </Col>
+        <Col span={6}>
+          <div>
+            <Card style={{ width: 300 }}>
+              <form
+                className="form"
+                onSubmit={(e) => {
+                  onSubmit(e);
                 }}
-              />
-            </div>
+              >
+                <div className="forms_field">
+                  <input
+                    type="text"
+                    placeholder="email"
+                    name="email"
+                    value={email}
+                    onChange={(e) => onChange(e)}
+                    required
+                  />
+                </div>
+                <div className="forms_field">
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    name="password"
+                    required
+                    value={password}
+                    onChange={(e) => {
+                      onChange(e);
+                    }}
+                  />
+                </div>
 
-            <div className="forms_buttons">
-              <input
-                type="submit"
-                value="Log In"
-                className="forms_buttons-action"
-              />
-            </div>
-            <p className="my-1">
-              Don't have an account? <Link to="/signup">Sign Up</Link>
-            </p>
-          </form>
-          <GoogleSignIn />
-          {/* <FaceBookSignIn /> */}
-        </Card>
-      </div>
+                <div className="forms_buttons">
+                  <input
+                    type="submit"
+                    value="Log In"
+                    className="forms_buttons-action"
+                  />
+                </div>
+                <p className="my-1">
+                  Don't have an account? <Link to="/signup">Sign Up</Link>
+                </p>
+              </form>
+              <GoogleSignIn />
+              {/* <FaceBookSignIn /> */}
+            </Card>
+          </div>
+        </Col>
+      </Row>
     </>
   );
 };
