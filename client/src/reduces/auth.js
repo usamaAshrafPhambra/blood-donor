@@ -1,4 +1,5 @@
 import {
+  LOADING,
   SIGNUP_FAIL,
   SIGNUP,
   USER_LOADED,
@@ -12,7 +13,7 @@ import {
 const initialState = {
   token: localStorage.getItem("token"),
   isAuthenticated: null,
-  loading: true,
+  loading: false,
   user: null,
 };
 
@@ -20,6 +21,11 @@ function auth(state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
+    case LOADING:
+      return {
+        ...state,
+        loading: true,
+      };
     case USER_LOADED:
       return {
         ...state,
@@ -40,16 +46,17 @@ function auth(state = initialState, action) {
         user: null,
       };
     case SIGNUP:
+      console.log("reducer", payload.token);
       localStorage.setItem("token", payload.token);
       return {
         ...state,
-        loadding: false,
+        loading: false,
       };
     case SIGNIN:
       localStorage.setItem("token", payload.token);
       return {
         ...state,
-        loadding: false,
+        loading: false,
         isAuthenticated: true,
       };
     default:

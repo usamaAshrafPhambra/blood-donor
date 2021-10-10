@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  LOADING,
   SIGNUP_FAIL,
   SIGNUP,
   USER_LOADED,
@@ -33,59 +34,63 @@ export const loadUser = () => async (dispatch) => {
   }
 };
 
-export const signup =
-  ({ name, email, password }, history) =>
-  async (dispatch) => {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    const body = JSON.stringify({ name, email, password });
-
-    try {
-      const res = await axios.post("/api/user", body, config);
-
-      dispatch({
-        type: SIGNUP,
-        payload: res.data,
-      });
-      // dispatch(loadUser());
-      if (res.data) {
-        history.push("/login");
-      }
-    } catch (err) {
-      dispatch({
-        type: SIGNUP_FAIL,
-      });
-    }
+export const signup = (values, history) => async (dispatch) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
   };
 
-export const signin =
-  ({ email, password }) =>
-  async (dispatch) => {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    const body = JSON.stringify({ email, password });
+  const body = values;
 
-    try {
-      const res = await axios.post("/api/auth", body, config);
+  try {
+    dispatch({
+      type: LOADING,
+    });
+    const res = await axios.post("/api/user", body, config);
+    dispatch({
+      type: SIGNUP,
+      payload: res.data,
+    });
 
-      dispatch({
-        type: SIGNIN,
-        payload: res.data,
-      });
+    if (res.data) {
+      history.push("/login");
+    }
+  } catch (err) {
+    dispatch({
+      type: SIGNUP_FAIL,
+    });
+  }
+};
+
+export const signin = (values) => async (dispatch) => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const body = values;
+
+  try {
+    dispatch({
+      type: LOADING,
+    });
+
+    const res = await axios.post("/api/auth", body, config);
+
+    dispatch({
+      type: SIGNIN,
+      payload: res.data,
+    });
+    if (res.data) {
       dispatch(loadUser());
-    } catch (error) {
-      dispatch({
-        type: SIGNIN_FAIL,
-      });
     }
-  };
+  } catch (error) {
+    dispatch({
+      type: SIGNIN_FAIL,
+    });
+  }
+};
 
 export const gsignin = (payload, history) => async (dispatch) => {
   try {

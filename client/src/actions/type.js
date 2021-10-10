@@ -1,3 +1,4 @@
+export const LOADING = "LOADING;";
 export const SIGNUP_FAIL = "SIGNUP_FAIL";
 export const SIGNUP = "SIGNUP";
 export const USER_LOADED = "USER_LOADED";

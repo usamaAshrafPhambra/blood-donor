@@ -2,10 +2,20 @@ import React, { useState } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { signup } from "../../actions/auth";
-import { Row, Col } from "antd";
-import { Card, Form, Input, Button, Checkbox } from "antd";
+import {
+  Card,
+  Form,
+  Input,
+  Row,
+  Col,
+  Typography,
+  Button,
+  Checkbox,
+} from "antd";
 import BloodDrop from "../../utils/BloodDrop";
-const Signup = ({ signup, history }) => {
+const Signup = ({ signup, history, loading }) => {
+  const { Paragraph } = Typography;
+  const [form] = Form.useForm();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -19,13 +29,12 @@ const Signup = ({ signup, history }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-
-    if (password !== password2) {
+  const submitForm = (values) => {
+    if (values.password !== values.conformPassword) {
       console.log("password do not match!", "danger");
     } else {
-      signup({ name, email, password }, history);
+      // console.log("in submit fun");
+      signup(values, history);
     }
   };
   // if (isAuthenticated) {
@@ -52,68 +61,87 @@ const Signup = ({ signup, history }) => {
               <BloodDrop />
             </Col>
             <Col span={20}>
-              <Card>
-                <Form
-                  className="form"
-                  onSubmit={(e) => {
-                    onSubmit(e);
+              <Card
+                style={{
+                  zIndex: 2,
+                  boxShadow: "5px 5px 5px 5px rgba(208, 216, 243, 0.6)",
+                }}
+              >
+                <Paragraph
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    fontWeight: "bolder",
                   }}
                 >
-                  <Form.Item>
-                    <Input
-                      type="text"
-                      placeholder="Name"
-                      name="name"
-                      value={name}
-                      onChange={(e) => onChange(e)}
-                      required
-                    />
+                  Sign up
+                </Paragraph>
+                <Form
+                  name="signUpForm"
+                  form={form}
+                  onFinish={submitForm}
+                  autoComplete="off"
+                >
+                  <Form.Item
+                    name="name"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input your username!",
+                      },
+                    ]}
+                  >
+                    <Input placeholder="Name" autoComplete="off" />
                   </Form.Item>
-                  <Form.Item>
-                    <Input
-                      type="text"
-                      placeholder="email"
-                      name="email"
-                      value={email}
-                      onChange={(e) => onChange(e)}
-                      required
-                    />
+                  <Form.Item
+                    name="email"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input your email!",
+                      },
+                    ]}
+                  >
+                    <Input placeholder="Email" autoComplete="off" />
                   </Form.Item>
-                  <Form.Item>
-                    <Input
-                      type="password"
-                      placeholder="Password"
-                      name="password"
-                      required
-                      value={password}
-                      onChange={(e) => {
-                        onChange(e);
-                      }}
-                    />
+                  <Form.Item
+                    name="password"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input your password!",
+                      },
+                    ]}
+                  >
+                    <Input.Password placeholder="Password" autoComplete="off" />
                   </Form.Item>
-                  <Form.Item>
-                    <Input
-                      type="password"
-                      placeholder="Conform password"
-                      name="password2"
-                      required
-                      value={password2}
-                      onChange={(e) => {
-                        onChange(e);
-                      }}
+                  <Form.Item
+                    name="conformPassword"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input your conform password!",
+                      },
+                    ]}
+                  >
+                    <Input.Password
+                      placeholder="conform password"
+                      autoComplete="off"
                     />
                   </Form.Item>
 
                   <Form.Item>
-                    <Input
-                      type="submit"
-                      value="Sign up"
-                      className="forms_buttons-action"
-                    />
+                    <Button
+                      loading={loading ? true : false}
+                      type="primary"
+                      htmlType="submit"
+                    >
+                      Sign up
+                    </Button>
                   </Form.Item>
-                  <p className="my-1">
-                    You have already account <Link to="/login">Log In</Link>
-                  </p>
+                  <Paragraph>
+                    You have already account <Link to="/login">sign In</Link>
+                  </Paragraph>
                 </Form>
               </Card>
             </Col>
@@ -125,6 +153,7 @@ const Signup = ({ signup, history }) => {
 };
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
+  loading: state.auth.loading,
 });
 
 // export default Signup;

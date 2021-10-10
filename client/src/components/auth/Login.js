@@ -5,13 +5,23 @@ import { connect } from "react-redux";
 import { signin, gsignin } from "../../actions/auth";
 import { useDispatch } from "react-redux";
 import GoogleSignIn from "./GoogleSignIn";
-import { Row, Col } from "antd";
+import {
+  Card,
+  Form,
+  Input,
+  Row,
+  Col,
+  Typography,
+  Button,
+  Checkbox,
+} from "antd";
+import BloodDrop from "../../utils/BloodDrop";
 import FaceBookSignIn from "./FaceBookSignIn";
 
-import { Card } from "antd";
 // import classes from "*.module.css";
 
-const Login = ({ signin, gsignin, isAuthenticated }) => {
+const Login = ({ signin, loading, isAuthenticated }) => {
+  const { Paragraph } = Typography;
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -25,10 +35,8 @@ const Login = ({ signin, gsignin, isAuthenticated }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-
-    signin({ email, password });
+  const submitForm = (values) => {
+    signin(values);
   };
 
   if (isAuthenticated) {
@@ -36,66 +44,114 @@ const Login = ({ signin, gsignin, isAuthenticated }) => {
   }
 
   return (
-    <>
-      <Row>
-        <Col style={{ backgroundColor: "black" }} span={18}>
-          u
-        </Col>
-        <Col span={6}>
-          <div>
-            <Card style={{ width: 300 }}>
-              <form
-                className="form"
-                onSubmit={(e) => {
-                  onSubmit(e);
+    <div>
+      <Row gutter={24}>
+        <Col xs={24} sm={24} md={6} lg={6} xl={6} xxl={6}>
+          <Row justify="center">
+            <Col
+              span={20}
+              style={{ display: "flex", justifyContent: "center" }}
+            >
+              <BloodDrop />
+            </Col>
+            <Col span={20}>
+              <Card
+                style={{
+                  zIndex: 2,
+                  boxShadow: "5px 5px 5px 5px rgba(208, 216, 243, 0.6)",
                 }}
               >
-                <div className="forms_field">
-                  <input
-                    type="text"
-                    placeholder="email"
+                <Paragraph
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    fontWeight: "bolder",
+                  }}
+                >
+                  Sign in
+                </Paragraph>
+                <Form
+                  name="signInForm"
+                  onFinish={submitForm}
+                  autoComplete="off"
+                >
+                  <Form.Item
                     name="email"
-                    value={email}
-                    onChange={(e) => onChange(e)}
-                    required
-                  />
-                </div>
-                <div className="forms_field">
-                  <input
-                    type="password"
-                    placeholder="Password"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input your email!",
+                      },
+                    ]}
+                  >
+                    <Input placeholder="email" autoComplete="off" />
+                  </Form.Item>
+                  <Form.Item
                     name="password"
-                    required
-                    value={password}
-                    onChange={(e) => {
-                      onChange(e);
-                    }}
-                  />
-                </div>
+                    rules={[
+                      {
+                        required: true,
+                        message: "Please input your password!",
+                      },
+                    ]}
+                  >
+                    <Input.Password placeholder="Password" autoComplete="off" />
+                  </Form.Item>
 
-                <div className="forms_buttons">
-                  <input
-                    type="submit"
-                    value="Log In"
-                    className="forms_buttons-action"
-                  />
-                </div>
-                <p className="my-1">
-                  Don't have an account? <Link to="/signup">Sign Up</Link>
-                </p>
-              </form>
-              <GoogleSignIn />
-              {/* <FaceBookSignIn /> */}
-            </Card>
-          </div>
+                  <Form.Item>
+                    <Button
+                      loading={loading ? true : false}
+                      type="primary"
+                      htmlType="submit"
+                    >
+                      Sign In
+                    </Button>
+                  </Form.Item>
+                  <Paragraph
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      fontWeight: "bolder",
+                    }}
+                  >
+                    or
+                  </Paragraph>
+
+                  <Row>
+                    <Col span={12}>
+                      <Paragraph>Sign in with</Paragraph>
+                    </Col>
+                    <Col span={12}>
+                      <GoogleSignIn />
+                    </Col>
+                  </Row>
+                  <Typography>
+                    Don't have an account? <Link to="/signup">Sign Up</Link>
+                  </Typography>
+                </Form>
+              </Card>
+            </Col>
+          </Row>
+
+          {/* <FaceBookSignIn /> */}
         </Col>
+        <Col
+          className="authPageImage"
+          xs={0}
+          sm={0}
+          md={18}
+          lg={18}
+          xl={18}
+          xxl={18}
+        ></Col>
       </Row>
-    </>
+    </div>
   );
 };
 
 const mapStateToProps = (state) => ({
   isAuthenticated: state.auth.isAuthenticated,
+  loading: state.auth.loading,
 });
 
 export default connect(mapStateToProps, { signin, gsignin })(Login);

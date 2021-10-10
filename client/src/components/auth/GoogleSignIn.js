@@ -2,6 +2,8 @@ import React from "react";
 import { GoogleLogin } from "react-google-login";
 import { gsignin } from "../../actions/auth";
 import { connect } from "react-redux";
+import { Button } from "antd";
+import { GooglePlusCircleFilled } from "@ant-design/icons";
 
 const GoogleSignIn = ({ gsignin, isAuthenticated }) => {
   const responseGoogle = async (response) => {
@@ -22,16 +24,10 @@ const GoogleSignIn = ({ gsignin, isAuthenticated }) => {
         redirectUri="http://localhost:3000/dashboard"
         // scope={`${process.env.GOOGLE_SCOPE}`}
         render={(renderProps) => (
-          <button
-            fullWidth
-            className="googlebutton"
-            // disabled={loading}
+          <GooglePlusCircleFilled
             onClick={renderProps.onClick}
-            size="large"
-            variant="contained"
-          >
-            <span style={{ padding: "7px" }}>Sign in with Google</span>
-          </button>
+            style={{ color: "#90caf9", fontSize: 25 }}
+          />
         )}
       />
     </div>
