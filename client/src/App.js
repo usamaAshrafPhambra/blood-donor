@@ -16,10 +16,10 @@ function App() {
       <PersistGate loading={null} persistor={store.persistor}>
         <Router>
           <Route exact path="/" component={Landing} />
+          <Route exact path="/dashboard" component={Dashboard} />
           <Switch>
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
-            <Route exact path="/dashboard" component={Dashboard} />
           </Switch>
         </Router>
       </PersistGate>
