@@ -82,10 +82,11 @@ export const signin = (values) => async (dispatch) => {
       type: SIGNIN,
       payload: res.data,
     });
-    if (res.data) {
+    if (res.status === 200) {
       dispatch(loadUser());
     }
   } catch (error) {
+    console.log("err in sign in");
     dispatch({
       type: SIGNIN_FAIL,
     });
@@ -103,9 +104,6 @@ export const gsignin = (payload, history) => async (dispatch) => {
       payload: data,
     });
     dispatch(loadUser());
-    if (res.data) {
-      history.push("/login");
-    }
   } catch (error) {
     dispatch({
       type: SIGNIN_FAIL,

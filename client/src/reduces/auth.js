@@ -46,10 +46,10 @@ function auth(state = initialState, action) {
         user: null,
       };
     case SIGNUP:
-      console.log("reducer", payload.token);
       localStorage.setItem("token", payload.token);
       return {
         ...state,
+        token: payload.token,
         loading: false,
       };
     case SIGNIN:
@@ -58,6 +58,7 @@ function auth(state = initialState, action) {
         ...state,
         loading: false,
         isAuthenticated: true,
+        token: payload.token,
       };
     default:
       return state;
